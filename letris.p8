@@ -5,18 +5,38 @@ __lua__
 --another tetris clone
 
 function _init()
-	
+	t=0
+	px=16
+	py=16
+	p={{1,1,1},{0,1}}
+	co=flr(rnd(15)+1)
 end
 
 function _update()
+	t+=1
+	
+	if btnp(5) then
+		co=flr(rnd(15)+1)
+	end
 	
 end
 
 function _draw()
 	cls()
-	spr(1,8,10)
-	spr(1,16,10)
-	spr(1,24,10)
+	pal(14,co)
+	draw_p()
+	rect(0,0,127,127,7)
+	rect(0,0,88,127,7)
+end
+
+function draw_p()
+	for i=1,#p do
+		for j=1,#p[i] do
+			if p[i][j]==1 then
+				spr(1,(px-1)+j*8,(py-1)+8*i)
+			end
+		end
+	end
 end
 __gfx__
 000000000000000000000000c000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
