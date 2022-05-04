@@ -6,6 +6,7 @@ __lua__
 
 function _init()
 	t=0
+	rt=30
 	px=16
 	py=16
 	cpi=1
@@ -16,7 +17,16 @@ function _init()
 	p5={{1,1,0},{0,1,1}}
 	p6={{1,0},{1,1},{0,1}}
 	p7={{0,1},{1,1},{1,0}}
-	cp={p1,p2,p3,p4,p5,p6,p7}
+	p8={{1,1},{1,0},{1,0}}
+	p9={{1,1},{0,1},{0,1}}
+	p10={{0,0,1},{1,1,1}}
+	p11={{1,0,0},{1,1,1}}
+	p12={{0,1,0},{1,1,1}}
+	p13={{1,0},{1,1},{1,0}}
+	p14={{1,1,1},{0,1,0}}
+	p15={{0,1},{1,1},{0,1}}
+	cp={p1,p2,p3,p4,p5,p6,p7,p8,
+		p9,p10,p11,p12,p13,p14,p15}
 	co=flr(rnd(15)+1)
 	p=cp[1]
 end
@@ -24,11 +34,21 @@ end
 function _update()
 	t+=1
 	
-	if btnp(0) then
+	if t%rt==0 then
+		py+=8
+	end
+	
+	if btn(3) then
+		rt=4
+	else
+		rt=30	
+	end
+	
+	if btnp(0) and px>2 then
 		px-=8
 	end
 	
-	if btnp(1) then
+	if btnp(1) and px<(88-le()) then
 		px+=8
 	end
 	
@@ -42,6 +62,9 @@ function _update()
 	if btnp(4) then
 		p=transpose()
 		p=m_multi(p)
+		if (px+le())>88 then
+			px-=px+le()-88
+		end
 	end
 	
 end
@@ -53,10 +76,14 @@ function _draw()
 	rect(0,0,127,127,7)
 	rect(0,0,88,127,7)
 	spr(3,px,py)
+	fix()
+	map()
 	
 	--debug
 	--print_p(p,32,32)
 	--print_p(m_multi(p),100,100)
+	--print(px.." "..py,100,120,8)
+	--print("l="..(px+le()),100,110,8)
 end
 
 function draw_p(_p)
@@ -116,6 +143,36 @@ function print_p(_p,_x,_y)
 		end
 	end
 end
+
+function le()
+	--length of a piece
+	--in pixels
+	local le=#p[1]*8
+	return le
+end
+
+function he()
+	--heigth of a piece
+	--in pixels
+	local he=#p*8
+	return he
+end
+
+function fix()
+	local x,y=px/8,py/8
+	if (he()+py)>120 then
+		for i=1,#p do
+			for j=1,#p[i] do
+				if p[i][j]==1 then
+					mset(x+(j-1),y+(i-1),2)
+				end
+			end
+		end
+		px,py=40,8
+		p=cp[flr(rnd(15)+1)]
+	end
+end
+
 __gfx__
 000000000000000000000000c000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000eeee000066660000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
