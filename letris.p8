@@ -29,6 +29,14 @@ function _init()
 		p9,p10,p11,p12,p13,p14,p15}
 	co=flr(rnd(15)+1)
 	p=cp[1]
+	
+	-------------------------
+	-- arrays for direction up, down, left, right
+	a_dirx={-1,1,0,0,1,1-1,-1}
+	a_diry={0,0,-1,1,-1,1,1-1}
+	----------------------------
+	
+	
 end
 
 function _update()
@@ -160,7 +168,7 @@ end
 
 function fix()
 	local x,y=px/8,py/8
-	if (he()+py)>120 then
+	if (he()+py)>120 or check_col() then
 		for i=1,#p do
 			for j=1,#p[i] do
 				if p[i][j]==1 then
@@ -170,6 +178,22 @@ function fix()
 		end
 		px,py=40,8
 		p=cp[flr(rnd(15)+1)]
+	end
+end
+
+function check_col()
+	local x,y=px/8,py/8
+	for i=1,#p do
+		for j=1,#p[i] do
+			if p[i][j]==1 then
+				for k=1,4 do
+					local dx,dy=a_dirx[k],a_diry[k]
+					if mget(x+(j-1)+dx,y+(i-1)+dy)==2 then
+						return true
+					end
+				end
+			end
+		end
 	end
 end
 
