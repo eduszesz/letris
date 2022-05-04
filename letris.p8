@@ -2,7 +2,7 @@ pico-8 cartridge // http://www.pico-8.com
 version 36
 __lua__
 --letris by eduszesz
---another tetris clone
+-- it is like tetris, but with l
 
 function _init()
 	t=0
