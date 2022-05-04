@@ -28,14 +28,14 @@ function _init()
 	cp={p1,p2,p3,p4,p5,p6,p7,p8,
 		p9,p10,p11,p12,p13,p14,p15}
 	co=flr(rnd(15)+1)
-	p=cp[1]
-	
+	p=cp[flr(rnd(15)+1)]
+	np=cp[flr(rnd(15)+1)]
+	lines=0	
 	-------------------------
 	-- arrays for direction up, down, left, right
 	a_dirx={-1,1,0,0,1,1-1,-1}
 	a_diry={0,0,-1,1,-1,1,1-1}
-	----------------------------
-	
+	----------------------------	
 	
 end
 
@@ -52,11 +52,13 @@ function _update()
 		rt=30	
 	end
 	
-	if btnp(0) and px>2 then
+	if btnp(0) and px>2
+		and (not check_xl())  then
 		px-=8
 	end
 	
-	if btnp(1) and px<(88-le()) then
+	if btnp(1) and px<(88-le())
+		and (not check_xr()) then
 		px+=8
 	end
 	
@@ -74,16 +76,20 @@ function _update()
 			px-=px+le()-88
 		end
 	end
+
+	check_lines()
 	
 end
 
 function _draw()
 	cls()
 	pal(14,co)
-	draw_p(p)
+	draw_p(p,px,py)
+	draw_p(np,96,24)
 	rect(0,0,127,127,7)
 	rect(0,0,88,127,7)
 	spr(3,px,py)
+	print("lines: "..lines,90,64,8)
 	fix()
 	map()
 	
@@ -94,8 +100,9 @@ function _draw()
 	--print("l="..(px+le()),100,110,8)
 end
 
-function draw_p(_p)
+function draw_p(_p,_x,_y)
 	local p=_p
+	local px,py=_x,_y
 	for i=1,#p do
 		for j=1,#p[i] do
 			if p[i][j]==1 then
@@ -168,7 +175,7 @@ end
 
 function fix()
 	local x,y=px/8,py/8
-	if (he()+py)>120 or check_col() then
+	if (he()+py)>120 or check_y() then
 		for i=1,#p do
 			for j=1,#p[i] do
 				if p[i][j]==1 then
@@ -177,18 +184,19 @@ function fix()
 			end
 		end
 		px,py=40,8
-		p=cp[flr(rnd(15)+1)]
+		p=np
+		np=cp[flr(rnd(15)+1)]
 	end
 end
 
-function check_col()
+function check_y()
 	local x,y=px/8,py/8
 	for i=1,#p do
 		for j=1,#p[i] do
 			if p[i][j]==1 then
 				for k=1,4 do
 					local dx,dy=a_dirx[k],a_diry[k]
-					if mget(x+(j-1)+dx,y+(i-1)+dy)==2 then
+					if mget(x+(j-1),y+(i-1)+dy)==2 then
 						return true
 					end
 				end
@@ -197,6 +205,52 @@ function check_col()
 	end
 end
 
+function check_xr()
+	local x,y=px/8,py/8
+	for i=1,#p do
+		for j=1,#p[i] do
+			if p[i][j]==1 then
+				local dx=1
+				if mget(x+(j-1)+dx,y+(i-1))==2 then
+					return true
+				end
+			end
+		end
+	end
+end
+
+function check_xl()
+	local x,y=px/8,py/8
+	for i=1,#p do
+		for j=1,#p[i] do
+			if p[i][j]==1 then	
+				local dx=-1
+				if mget(x+(j-1)+dx,y+(i-1))==2 then
+					return true
+				end
+			end
+		end
+	end
+end
+
+function check_lines()
+		
+	for y=0,16 do
+		local s=0
+		for x=0,10 do
+			if mget(x,y)==2 then
+				s+=1
+			end
+			if s==11 then
+				s=0
+				lines+=1
+				for k=0,10 do
+					mset(k,y,0)
+				end
+			end
+		end
+	end
+end
 __gfx__
 000000000000000000000000c000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000eeee000066660000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
