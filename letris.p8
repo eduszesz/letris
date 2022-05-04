@@ -8,18 +8,35 @@ function _init()
 	t=0
 	px=16
 	py=16
-	p={{1,1},{1,0},{1,0}}
-	p1={{1,0},{1,1},{1,0}}
-	p2={{0,1},{1,1,1}}
+	cpi=1
+	p1={{1,1},{1,1}}
+	p2={{1,1,1,1}}
+	p3={{1},{1},{1},{1}}
+	p4={{0,1,1},{1,1,0}}
+	p5={{1,1,0},{0,1,1}}
+	p6={{1,0},{1,1},{0,1}}
+	p7={{0,1},{1,1},{1,0}}
+	cp={p1,p2,p3,p4,p5,p6,p7}
 	co=flr(rnd(15)+1)
-	pt={}
+	p=cp[1]
 end
 
 function _update()
 	t+=1
 	
+	if btnp(0) then
+		px-=8
+	end
+	
+	if btnp(1) then
+		px+=8
+	end
+	
 	if btnp(5) then
 		co=flr(rnd(15)+1)
+		cpi+=1
+		if cpi>#cp then cpi=1 end
+		p=cp[cpi]
 	end
 	
 	if btnp(4) then
@@ -37,8 +54,9 @@ function _draw()
 	rect(0,0,88,127,7)
 	spr(3,px,py)
 	
-	print_p(p,32,32)
-	print_p(m_multi(p),100,100)
+	--debug
+	--print_p(p,32,32)
+	--print_p(m_multi(p),100,100)
 end
 
 function draw_p(_p)
@@ -53,6 +71,7 @@ function draw_p(_p)
 end
 
 function transpose()
+--transpose a matrix
 	local res = {}
 	for i=1, #p[1] do
 		res[i]={}
@@ -60,11 +79,12 @@ function transpose()
 			res[i][j] = p[j][i]
 		end
 	end
-	pt=res
 	return res
 end
 
 function m_multi(_p)
+--multiply a matrix by a secondary diagonal matrix
+--to mirror a matrix	
 	local p=_p
 	local res={}
 	local m2={{0,1},{1,0}}
