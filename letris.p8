@@ -35,8 +35,14 @@ function _init()
 	-- arrays for direction up, down, left, right
 	a_dirx={-1,1,0,0,1,1-1,-1}
 	a_diry={0,0,-1,1,-1,1,1-1}
-	----------------------------	
-	
+	----------------------------
+	grid = {}
+	for i=1,11 do
+		grid[i]={}
+		for j=1,16 do
+			grid[i][j]=0
+		end
+	end
 end
 
 function _update()
@@ -53,12 +59,12 @@ function _update()
 	end
 	
 	if btnp(0) and px>2
-		and (not check_xl())  then
+		and (not check_x(-1))  then
 		px-=8
 	end
 	
 	if btnp(1) and px<(88-le())
-		and (not check_xr()) then
+		and (not check_x(1)) then
 		px+=8
 	end
 	
@@ -95,7 +101,7 @@ function _draw()
 	
 	--debug
 	--print_p(p,32,32)
-	--print_p(m_multi(p),100,100)
+	--print_p(grid,0,0)
 	--print(px.." "..py,100,120,8)
 	--print("l="..(px+le()),100,110,8)
 end
@@ -205,12 +211,12 @@ function check_y()
 	end
 end
 
-function check_xr()
+function check_x(_dx)
 	local x,y=px/8,py/8
+	local dx=_dx
 	for i=1,#p do
 		for j=1,#p[i] do
 			if p[i][j]==1 then
-				local dx=1
 				if mget(x+(j-1)+dx,y+(i-1))==2 then
 					return true
 				end
@@ -219,19 +225,6 @@ function check_xr()
 	end
 end
 
-function check_xl()
-	local x,y=px/8,py/8
-	for i=1,#p do
-		for j=1,#p[i] do
-			if p[i][j]==1 then	
-				local dx=-1
-				if mget(x+(j-1)+dx,y+(i-1))==2 then
-					return true
-				end
-			end
-		end
-	end
-end
 
 function check_lines()
 		
