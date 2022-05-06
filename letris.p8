@@ -6,6 +6,7 @@ __lua__
 
 function _init()
 	t=0
+	ft=0
 	rt=30
 	nrt=30
 	px=40
@@ -37,7 +38,8 @@ function _init()
 	pline=9	
 	level=1
 	explosions={}
-	grid = {}
+	grid={}
+	float={}
 	for i=1,11 do
 		grid[i]={}
 		for j=1,16 do
@@ -98,7 +100,7 @@ function _update()
 	fix()
 	set_explosions()
 	check_level()
-	
+	dofloats()	
 end
 
 function _draw()
@@ -116,6 +118,10 @@ function _draw()
 	draw_grid()
 	map()
 	draw_explosions()
+	
+	for f in all(float) do
+		print(f.txt,f.x,f.y,f.c)
+	end
 	
 	--debug
 	--print_p(p,32,32)
@@ -198,8 +204,11 @@ function he()
 end
 
 function fix()
-	local x,y=px/8,py/8
-	if (he()+py)>121 or check_y() then
+	local x,y,t=px/8,py/8,0
+	if (he()+py)>120 or check_y() then
+		--ft+=1
+		--if ft==10 then
+		--ft=0
 		for i=1,#p do
 			for j=1,#p[i] do
 				if p[i][j]==1 then
@@ -214,6 +223,7 @@ function fix()
 		cpi=flr(rnd(15)+1)
 		np=cp[cpi]
 		co=cot[cpi]
+--	end
 	end
 end
 
@@ -311,9 +321,26 @@ function check_level()
 			level+=1
 			lines=0
 			sfx(4)
-			nrt-=2
+			nrt-=3
+			if nrt<2 then nrt=3 end
+			addfloat("level "..level,32,64,7)
 	end
 end
+
+function addfloat(_txt,_x,_y,_c)
+ add(float,{txt=_txt,x=_x,y=_y,c=_c,ty=_y-10,t=0})
+end
+
+function dofloats()
+ for f in all(float) do
+  f.y+=(f.ty-f.y)/10
+  f.t+=1
+  if f.t>70 then
+   del(float,f)
+  end
+ end
+end
+
 __gfx__
 000000000000000000000000c000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000eeee000066660000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
