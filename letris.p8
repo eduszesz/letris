@@ -33,7 +33,9 @@ function _init()
 	--co=flr(rnd(15)+1)
 	co=cot[cpi]
 	p=cp[cpi]
-	np=cp[flr(rnd(15)+1)]
+	ncpi=flr(rnd(15)+1)
+	np=cp[ncpi]
+	nco=cot[ncpi]
 	lines=9
 	pline=9	
 	level=1
@@ -57,8 +59,8 @@ function _update()
 		end
 	end
 	
-	if btn(3) then
-		rt=3
+	if btn(3) and ft==0 then
+		rt=4
 		sfx(3)
 	else
 		rt=nrt	
@@ -97,7 +99,11 @@ function _update()
 			py-=py+he()-128
 		end	
 	end
-
+	
+	if (py+he())>128 then
+			py-=py+he()-128
+	end
+	
 	check_lines()
 	fix()
 	set_explosions()
@@ -128,7 +134,7 @@ function _draw()
 	--debug
 	--print_p(p,32,32)
 	--print_p(grid,0,0)
-	--print(px.." "..py,100,120,8)
+	print(cpi.." "..cot[cpi],100,120,8)
 	--print("l="..(px+le()),100,110,8)
 end
 
@@ -221,10 +227,11 @@ function fix()
 				end
 			end
 			px,py=40,0
+			co=nco
 			p=np
 			cpi=flr(rnd(15)+1)
 			np=cp[cpi]
-			co=cot[cpi]
+			nco=cot[cpi]
 		end
 	end
 end
