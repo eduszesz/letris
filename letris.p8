@@ -29,7 +29,7 @@ function _init()
 	p15={{0,1},{1,1},{0,1}}
 	cp={p1,p2,p3,p4,p5,p6,p7,p8,
 		p9,p10,p11,p12,p13,p14,p15}
-	cot={3,4,5,6,7,8,9,10,11,12,13,14,15,15,15}	
+	cot={7,14,14,12,11,12,11,10,9,9,10,8,8,8,8}	
 	--co=flr(rnd(15)+1)
 	co=cot[cpi]
 	p=cp[cpi]
@@ -52,7 +52,9 @@ function _update()
 	t+=1
 	
 	if t%rt==0 then
-		py+=8
+		if py<120 or (not check_y()) then
+			py+=8
+		end
 	end
 	
 	if btn(3) then
@@ -206,24 +208,24 @@ end
 function fix()
 	local x,y,t=px/8,py/8,0
 	if (he()+py)>120 or check_y() then
-		--ft+=1
-		--if ft==10 then
-		--ft=0
-		for i=1,#p do
-			for j=1,#p[i] do
-				if p[i][j]==1 then
-					sfx(2)
-					local ix,iy=x+j,y+i
-					grid[ix][iy]=1
+		ft+=1
+		if ft==10 then
+			ft=0
+			for i=1,#p do
+				for j=1,#p[i] do
+					if p[i][j]==1 then
+						sfx(2)
+						local ix,iy=x+j,y+i
+						grid[ix][iy]=1
+					end
 				end
 			end
+			px,py=40,0
+			p=np
+			cpi=flr(rnd(15)+1)
+			np=cp[cpi]
+			co=cot[cpi]
 		end
-		px,py=40,0
-		p=np
-		cpi=flr(rnd(15)+1)
-		np=cp[cpi]
-		co=cot[cpi]
---	end
 	end
 end
 
@@ -270,7 +272,7 @@ function check_lines()
 				pline+=1
 				explode(0,y)
 				for l=1,11 do
-					for m=16,1,-1 do
+					for m=y,1,-1 do
 						grid[l][m]=grid[l][m-1]
 					end
 				end
