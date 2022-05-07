@@ -31,7 +31,7 @@ function _init()
 		p9,p10,p11,p12,p13,p14,p15}
 	cot={7,14,14,12,11,12,11,10,9,9,10,8,8,8,8}	
 	--co=flr(rnd(15)+1)
-	levelco={7,15,12,11,10,9,8,3,4,6,13,7}
+	levelco={7,3,12,11,10,9,8,3,4,6,13,7}
 	lcoi=1
 	co=cot[cpi]
 	p=cp[cpi]
@@ -120,11 +120,10 @@ function _draw()
 	draw_p(np,96,24,2)
 	rect(0,0,127,127,levelco[lcoi])
 	rect(0,0,88,127,levelco[lcoi])
-	spr(3,px,py)
 	print("lines:",96,64,8)
 	print(pline,104,72,8)
-	print("level:",96,80,10)
-	print(level,104,88,10)
+	print("level:",96,88,10)
+	print(level,104,96,10)
 	draw_grid()
 	map()
 	draw_explosions()
@@ -134,9 +133,10 @@ function _draw()
 	end
 	
 	--debug
+	--spr(3,px,py)
 	--print_p(p,32,32)
 	--print_p(grid,0,0)
-	--print(cpi.." "..cot[cpi],100,120,8)
+	print(nrt,100,120,8)
 	--print("l="..(px+le()),100,110,8)
 end
 
@@ -323,7 +323,7 @@ end
 
 function draw_explosions()
 	for e in all(explosions)do
-		rectfill(e.x,e.y+4+e.t,88,e.y-8-e.t,e.t)
+		rectfill(e.x,e.y+(e.t/2),88,e.y-8-(e.t/2),e.t)
 	end
 end
 
@@ -337,7 +337,7 @@ function check_level()
 			lines=0
 			sfx(4)
 			nrt-=3
-			if nrt<2 then nrt=3 end
+			if nrt<5 then nrt=4 end
 			addfloat("level "..level,32,64,7)
 	end
 end
