@@ -2,7 +2,7 @@ pico-8 cartridge // http://www.pico-8.com
 version 36
 __lua__
 --letris by eduszesz
--- it is like tetris, but with l
+--it is like tetris, but with l
 
 function _init()
 	state="init"
@@ -11,17 +11,19 @@ end
 
 function _update()
 	t+=1
-	
+	checkfade()	
 	if state=="init" then
 		if btnp(4) then
 			state="game"
 			initialize()
+			fadeout()
 		end
 	end
 	
 	if state=="over" then
 		if btnp(4) then
 			state="init"
+			fadeout()
 		end
 	end
 		
@@ -48,15 +50,16 @@ function _update()
 			px+=8
 			sfx(3)
 		end
-		
+		--[[
 		if btnp(5) then
 			co=flr(rnd(15)+1)
 			cpi+=1
 			if cpi>#cp then cpi=1 end
 			p=cp[cpi]
-		end
+		end]]
 		
-		if btnp(4) or btnp(2) then
+		if btnp(4) or btnp(2)
+			or btnp(5) then
 			p=transpose()
 			p=m_multi(p)
 			sfx(0)
@@ -93,15 +96,21 @@ end
 
 function _draw()
 	cls()
+	
 	if state=="init" then
 		local co=7
+		local l={{1,0},{1,0},{1,1}}
 		if t%16<8 then
 			co=13
 		end
 		rect(0,0,127,127,7)
 		rect(1,1,126,126,12)
 		sspr(40,32,47,7,15,20,100,20)
-		print("press 🅾️ to begin",32,80,co)
+		print("it is like tetris,",32,64,7)
+		print("but with",32,82,7)
+		pal(14,9)
+		draw_p(l,72,72,1)
+		print("press 🅾️ to begin",32,108,co)
 	end
 	
 	if state=="over" then
@@ -314,6 +323,7 @@ function game_over()
 	for x=1,11 do
 		if grid[x][1]==1 then			
 			state="over"
+			fadeout()
 		end
 	end		
 end
@@ -342,7 +352,7 @@ end
 
 function check_level()
 	local dy=3
-	if lines>=1 then
+	if lines>=10 then
 			level+=1
 			lcoi+=1
 			if lcoi>10 then
@@ -359,6 +369,11 @@ function check_level()
 	end
 end
 
+
+--functions from
+--porklike tutorial
+--by lazydevs
+
 function addfloat(_txt,_x,_y,_c)
  add(float,{txt=_txt,x=_x,y=_y,c=_c,ty=_y-10,t=0})
 end
@@ -372,9 +387,6 @@ function dofloats()
   end
  end
 end
-
---fade from porklike tutorial
---by lazydevs
 
 function dofade()
  local p,kmax,col,k=flr(mid(0,fadeperc,1)*100)
@@ -459,6 +471,11 @@ function initialize()
 			grid[i][j]=0
 		end
 	end
+	----------------------------
+	-- required for fade
+	dpal={0,1,1,2,1,13,6,4,4,9,3,13,1,13,14}
+	fadeperc=1
+	-----------------------------	
 end
 __gfx__
 000000000000000000000000c000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
