@@ -361,7 +361,7 @@ function check_level()
 			if level>8 then
 				dy=1
 			end
-			lines=0
+			lines=lines-10
 			sfx(4)
 			nrt-=dy
 			if nrt<=4 then nrt=4 end
