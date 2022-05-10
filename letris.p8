@@ -190,7 +190,7 @@ function _draw()
 		--spr(3,px,py)
 		--print_p(p,32,32)
 		--print_p(grid,0,0)
-		print(on,100,120,8)
+		--print(on,100,120,8)
 		--print("l="..(px+le()),100,110,8)
 	end
 end
