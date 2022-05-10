@@ -6,6 +6,7 @@ __lua__
 
 function _init()
 	state="init"
+	on="off"
 	initialize()
 end
 
@@ -13,12 +14,31 @@ function _update()
 	t+=1
 	checkfade()	
 	if state=="init" then
+		if btnp(5) then
+			state="settings"
+		end
+		
 		if btnp(4) then
 			state="game"
 			initialize()
 			fadeout()
 		end
 	end
+	
+	if state=="settings" then
+		if btnp(4) then
+			state="init"
+		end
+		if btnp(2) then
+			on="on"
+		end
+		
+		if btnp(3) then
+			on="off"
+		end
+		
+	end
+	
 	
 	if state=="over" then
 		if btnp(4) then
@@ -28,6 +48,8 @@ function _update()
 	end
 		
 	if state=="game" then
+		local bt=4
+		if on=="on" then bt=2 end
 		if t%rt==0 and ft==0 then
 			py+=8
 		end
@@ -58,7 +80,7 @@ function _update()
 			p=cp[cpi]
 		end]]
 		
-		if btnp(4) or btnp(2)
+		if btnp(4) or btnp(bt)
 			or btnp(5) then
 			p=transpose()
 			p=m_multi(p)
@@ -105,12 +127,31 @@ function _draw()
 		end
 		rect(0,0,127,127,7)
 		rect(1,1,126,126,12)
-		sspr(40,32,47,7,15,20,100,20)
-		print("it is like tetris,",32,64,7)
-		print("but with",32,82,7)
+		sspr(40,32,47,7,15,10,100,20)
+		print("it is like tetris,",32,40,7)
+		print("but with",32,62,7)
 		pal(14,9)
-		draw_p(l,72,72,1)
-		print("press 🅾️ to begin",32,108,co)
+		draw_p(l,72,52,1)
+		print("press 🅾️ to start",32,88,co)
+		print("press ❎ for settings",24,104,7)
+	end
+	
+	if state=="settings" then
+		local co=7
+		rect(0,0,127,127,7)
+		rect(1,1,126,126,11)
+		print("add ⬆️ for rotation:",22,24,7)
+		if on=="on" then
+			co=11
+			print("➡️",54,32,7)
+		else
+			co=7
+			print("➡️",54,40,7)
+		end
+		print("on",64,32,co)
+		print("off",64,40,7)
+		
+		print("press 🅾️ to exit",32,88,7)
 	end
 	
 	if state=="over" then
@@ -149,7 +190,7 @@ function _draw()
 		--spr(3,px,py)
 		--print_p(p,32,32)
 		--print_p(grid,0,0)
-		--print(nrt,100,120,8)
+		print(on,100,120,8)
 		--print("l="..(px+le()),100,110,8)
 	end
 end
@@ -470,7 +511,7 @@ function initialize()
 		for j=1,16 do
 			grid[i][j]=0
 		end
-	end
+	end	
 	----------------------------
 	-- required for fade
 	dpal={0,1,1,2,1,13,6,4,4,9,3,13,1,13,14}
