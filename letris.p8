@@ -55,7 +55,7 @@ function _update()
 		end
 		
 		if btn(3) and ft==0 then
-			rt=4
+			rt=1
 			sfx(3)
 		else
 			rt=nrt	
