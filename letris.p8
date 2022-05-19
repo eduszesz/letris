@@ -10,7 +10,7 @@ function _init()
 	mon="on"
 	initialize()
 	music(0,3000)
-	cursory=24
+	
 end
 
 function _update()
@@ -533,6 +533,7 @@ function initialize()
 	py=0
 	co_r=7
 	co_m=13
+	cursory=24
 	cpi=flr(rnd(15)+1)
 	p1={{1,1},{1,1}}
 	p2={{1,1,1,1}}
