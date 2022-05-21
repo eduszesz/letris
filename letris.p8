@@ -557,7 +557,7 @@ function initialize()
 	nco=cot[ncpi]
 	lines=0
 	pline=0	
-	level=1
+	level=0
 	explosions={}
 	grid={}
 	float={}
