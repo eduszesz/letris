@@ -119,29 +119,24 @@ function _update()
 			px+=8
 			sfx(3)
 		end
-		--[[
-		if btnp(5) then
-			co=flr(rnd(15)+1)
-			cpi+=1
-			if cpi>#cp then cpi=1 end
-			p=cp[cpi]
-		end]]
 		
-		if btnp(4) or btnp(bt)
-			or btnp(5) then
-			p=transpose()
-			p=m_multi(p)
-			sfx(0)
-			if (px+le())>88 then
-				px-=px+le()-88
+		if ft==0 then
+			if btnp(4) or btnp(bt)
+				or btnp(5) then
+				p=transpose()
+				p=m_multi(p)
+				sfx(0)
+				if (px+le())>88 then
+					px-=px+le()-88
+				end
+				if px<0 then
+					px=0
+				end
+				if (py+he())>128 then
+					py-=py+he()-128
+				end	
 			end
-			if px<0 then
-				px=0
-			end
-			if (py+he())>128 then
-				py-=py+he()-128
-			end	
-		end
+		end	
 		
 		if (py+he())>128 then
 				py-=py+he()-128
@@ -578,6 +573,7 @@ function initialize()
 	fadeperc=1
 	-----------------------------	
 end
+
 __gfx__
 000000000000000000000000c000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000eeee000066660000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
