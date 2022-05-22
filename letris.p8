@@ -15,7 +15,7 @@ end
 
 function _update()
 	t+=1
-	checkfade()	
+	checkfade()
 	if state=="init" then
 		if btnp(5) then
 			state="settings"
