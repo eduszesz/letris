@@ -2,14 +2,14 @@ pico-8 cartridge // http://www.pico-8.com
 version 36
 __lua__
 --letris by eduszesz
---it is like tetris, but with l
+--a tetris like game
 
 function _init()
 	state="init"
-	on="off"
-	mon="on"
+	on="off" --⬆️ for rotation
+	mon="off" --music off
 	initialize()
-	music(0,3000)
+	--music(0,3000)
 	
 end
 
@@ -49,7 +49,7 @@ function _update()
 		end
 		
 		if cursory==40 then
-			if btnp(0) then
+			if btnp(1) then
 			 if mon=="off" then
 			 	music(0,3000)
 			 end
@@ -58,7 +58,7 @@ function _update()
 		end
 		
 		if cursory==40 then
-			if btnp(1) then 
+			if btnp(0) then 
 				mon="off"
 				music(-1)
 			end
@@ -177,14 +177,9 @@ function _draw()
 		print("a tetris",22,64,7)
 		print("ike game",76,64,7)
 		pal(14,9)
-		--pal(6,10)
 		draw_p(l,58,46,1)
 		print("press 🅾️ to start",32,88,co)
 		print("press ❎ for settings",24,104,7)
-		--draw_p(l,2,102,1)
-		--draw_p(l3,110,2,1)
-		--draw_p(l2,110,102,2)
-		--draw_p(l4,2,2,2)
 	end
 	
 	if state=="settings" then
@@ -247,6 +242,7 @@ function _draw()
 end
 
 function draw_p(_p,_x,_y,_sp)
+	--draw a piece
 	local p=_p
 	local px,py,sp=_x,_y,_sp
 	for i=1,#p do
@@ -297,6 +293,8 @@ function m_multi(_p)
 end
 
 function print_p(_p,_x,_y)
+	--for debugging
+	--print the grid for a piece
 	local p,x,y=_p,_x,_y
 	for i=1,#p do
 		for j=1,#p[i] do
@@ -320,6 +318,7 @@ function he()
 end
 
 function fix()
+ --fix a piece when it reaches the floor
 	local x,y,t=px/8,py/8,0
 	if (he()+py)>120 or check_y() then
 		ft+=1
@@ -345,6 +344,7 @@ function fix()
 end
 
 function check_y()
+	--check for collision at y axis
 	local x,y=px/8,py/8
 	for i=1,#p do
 		for j=1,#p[i] do
@@ -359,6 +359,7 @@ function check_y()
 end
 
 function check_x(_dx)
+	--check for collision at x axis	local x,y=px/8,py/8
 	local x,y=px/8,py/8
 	local dx=_dx
 	for i=1,#p do
@@ -374,7 +375,7 @@ end
 
 
 function check_lines()
-		
+	--check if there are full lines	
 	for y=1,16 do
 		local s=0
 		for x=1,11 do
@@ -400,6 +401,8 @@ function check_lines()
 end
 
 function draw_grid()
+	--for debugging only
+	--print the grid
 	for i=1,11 do
 		for j=1,16 do
 			if grid[i][j]==1 then
@@ -412,6 +415,7 @@ function draw_grid()
 end
 
 function game_over()
+	--check if the top line has a piece fixed
 	for x=1,11 do
 		if grid[x][1]==1 then
 			music(-1,1200)			
@@ -422,6 +426,8 @@ function game_over()
 end
 
 function explode(_x,_y)
+	--create explosion
+	--when a line is full
 	local x,y=_x*8,_y*8
 	local e={x=x,y=y,t=0}
 	add(explosions,e)
@@ -429,6 +435,7 @@ function explode(_x,_y)
 end
 
 function set_explosions()
+	--set the explosions
 	for e in all(explosions) do
 		e.t+=1
 		if e.t>8 then
@@ -438,12 +445,14 @@ function set_explosions()
 end
 
 function draw_explosions()
+	--draw the explosions
 	for e in all(explosions)do
 		rectfill(e.x,e.y+(e.t/2),88,e.y-8-(e.t/2),e.t)
 	end
 end
 
 function check_level()
+	--check if ten lines were cleaned
 	local dy=3
 	if lines>=10 then
 			level+=1
@@ -520,16 +529,17 @@ end
 -- ---------------
 
 function initialize()
+	--initialize variables
 	t=0
-	ft=0
-	rt=30
-	nrt=30
-	px=40
-	py=0
-	co_r=7
-	co_m=13
-	cursory=24
-	cpi=flr(rnd(15)+1)
+	ft=0 -- time counter before fixing a piece
+	rt=30 --initial falling speed
+	nrt=30 --new falling speed
+	px=40 --piece x position
+	py=0 -- piece y position
+	co_r=7 --color in settings text
+	co_m=13 --color in settings text
+	cursory=24 --cursor position in settings screen
+	cpi=flr(rnd(15)+1) --piece table index
 	p1={{1,1},{1,1}}
 	p2={{1,1,1,1}}
 	p3={{1},{1},{1},{1}}
@@ -546,21 +556,23 @@ function initialize()
 	p14={{1,1,1},{0,1,0}}
 	p15={{0,1},{1,1},{0,1}}
 	cp={p1,p2,p3,p4,p5,p6,p7,p8,
-		p9,p10,p11,p12,p13,p14,p15}
-	cot={7,14,14,12,11,12,11,10,9,9,10,8,8,8,8}	
-	levelco={7,3,12,11,10,9,8,3,4,6,13,7}
-	lcoi=1
-	co=cot[cpi]
-	p=cp[cpi]
-	ncpi=flr(rnd(15)+1)
-	np=cp[ncpi]
-	nco=cot[ncpi]
-	lines=0
-	pline=0	
-	level=0
-	explosions={}
-	grid={}
-	float={}
+		p9,p10,p11,p12,p13,p14,p15} -- pieces tables
+	cot={7,14,14,12,11,12,11,10,9,9,10,8,8,8,8}--color pieces table	
+	levelco={7,3,12,11,10,9,8,3,4,6,13,7}--color level table
+	lcoi=1--level color index
+	co=cot[cpi]--current color for piece
+	p=cp[cpi]--current piece
+	ncpi=flr(rnd(15)+1)--new piece index
+	np=cp[ncpi]--next piece
+	nco=cot[ncpi]--next color piece
+	lines=0-- lines cleared
+	pline=0-- level lines counter	
+	level=0-- level index
+	explosions={}--required for explosions
+	grid={}--the grid
+	float={}--required for floating text
+	--fill the grid with zeros
+	--ythe grid is empty
 	for i=1,11 do
 		grid[i]={}
 		for j=1,16 do
@@ -575,14 +587,14 @@ function initialize()
 end
 
 __gfx__
-000000000000000000000000c000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000eeee000066660000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-007007000ee11ee00661166000c00c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000770000e1551e006155160000cc000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000770000e1551e006155160000cc000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-007007000ee11ee00661166000c00c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+007007000ee11ee00661166000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000770000e1551e00615516000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000770000e1551e00615516000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+007007000ee11ee00661166000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000eeee000066660000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000c000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
