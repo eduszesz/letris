@@ -11,6 +11,12 @@ function _init()
 	initialize()
 	--music(0,3000)
 	
+	--toggle music using the pause menu
+	menuitem(1,"music off",
+	function() musict(-1) end)
+	menuitem(2,"music on",
+	function() musict(0) end)	
+	-- --------------------------------
 end
 
 function _update()
@@ -217,6 +223,7 @@ function _draw()
 	if state=="game" then
 		pal(14,co)
 		draw_p(p,px,py,1)
+		print("next",100,16,7)
 		draw_p(np,96,24,2)
 		rect(0,0,127,127,levelco[lcoi])
 		rect(0,0,88,127,levelco[lcoi])
@@ -586,6 +593,15 @@ function initialize()
 	-----------------------------	
 end
 
+function musict(_i)
+	--toggle music using the pause menu
+	local i=_i
+	local t=0
+	if i==0 then t=3000 end
+	if i==0 then mon="on" end
+	if i==-1 then mon="off" end
+	music(i,0)
+end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000eeee000066660000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
