@@ -7,9 +7,9 @@ __lua__
 function _init()
 	state="init"
 	on="off" --⬆️ for rotation
-	mon="off" --music off
+	mon="on" --music on
 	initialize()
-	--music(0,3000)
+	music(0,3000)
 	
 	--toggle music using the pause menu
 	menuitem(1,"music off",
@@ -597,10 +597,13 @@ function musict(_i)
 	--toggle music using the pause menu
 	local i=_i
 	local t=0
-	if i==0 then t=3000 end
-	if i==0 then mon="on" end
+	if state=="game" and i==0 then
+		i=12
+	end
+	if i>=0 then t=3000 end
+	if i>=0 then mon="on" end
 	if i==-1 then mon="off" end
-	music(i,0)
+	music(i,t)
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
