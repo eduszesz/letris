@@ -366,7 +366,7 @@ function check_y()
 end
 
 function check_x(_dx)
-	--check for collision at x axis	local x,y=px/8,py/8
+	--check for collision at x axis
 	local x,y=px/8,py/8
 	local dx=_dx
 	for i=1,#p do
@@ -382,7 +382,8 @@ end
 
 
 function check_lines()
-	--check if there are full lines	
+	--check if there are full lines
+	local lc=0 -- line counter to diplay combo lines cleaned
 	for y=1,16 do
 		local s=0
 		for x=1,11 do
@@ -393,6 +394,7 @@ function check_lines()
 				s=0
 				lines+=1
 				pline+=1
+				lc+=1
 				explode(0,y)
 				for l=1,11 do
 					for m=y,1,-1 do
@@ -404,6 +406,9 @@ function check_lines()
 				end	
 			end
 		end
+	end
+	if lc>0 then
+		addfloat(linemsg[lc],32,64,7)
 	end
 end
 
@@ -579,7 +584,7 @@ function initialize()
 	grid={}--the grid
 	float={}--required for floating text
 	--fill the grid with zeros
-	--ythe grid is empty
+	--the grid is empty
 	for i=1,11 do
 		grid[i]={}
 		for j=1,16 do
@@ -590,7 +595,8 @@ function initialize()
 	-- required for fade
 	dpal={0,1,1,2,1,13,6,4,4,9,3,13,1,13,14}
 	fadeperc=1
-	-----------------------------	
+	-----------------------------
+	linemsg ={"single","double","triple","tetris"}
 end
 
 function musict(_i)
