@@ -408,7 +408,7 @@ function check_lines()
 		end
 	end
 	if lc>0 then
-		addfloat(linemsg[lc],32,64,7)
+		addfloat(linemsg[lc],32,48,7)
 	end
 end
 
