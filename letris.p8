@@ -67,13 +67,13 @@ function _update()
 		end
 		
 		if btnp(0) and px>2
-			and (not check_x(-1))  then
+			and (not check_x(-1,p))  then
 			px-=8
 			sfx(3)
 		end
 		
 		if btnp(1) and px<(88-le())
-			and (not check_x(1)) then
+			and (not check_x(1,p)) then
 			px+=8
 			sfx(3)
 		end
@@ -81,17 +81,19 @@ function _update()
 		if ft==0 then
 			if btnp(4) or btnp(bt)
 				or btnp(5) then
-				p=transpose()
-				p=m_multi(p)
-				sfx(0)
-				if (px+le())>88 then
-					px-=px+le()-88
-				end
-				if px<0 then
-					px=0
-				end
-				if (py+he())>128 then
-					py-=py+he()-128
+				if avoidrot() then
+					p=transpose(p)
+					p=m_multi(p)
+					sfx(0)
+					if (px+le())>88 then
+						px-=px+le()-88
+					end
+					if px<0 then
+						px=0
+					end
+					if (py+he())>128 then
+						py-=py+he()-128
+					end
 				end	
 			end
 		end	
@@ -106,7 +108,7 @@ function _update()
 		check_level()
 		dofloats()
 		
-		if not check_y()
+		if not check_y(1,p)
 		and ((py+he())<128) then
 			ft=0
 		end
@@ -198,8 +200,9 @@ function draw_p(_p,_x,_y,_sp)
 	end
 end
 
-function transpose()
+function transpose(_p)
 --transpose a matrix
+	local p=_p
 	local res = {}
 	for i=1, #p[1] do
 		res[i]={}
@@ -264,7 +267,7 @@ end
 function fix()
  --fix a piece when it reaches the floor
 	local x,y,t=px/8,py/8,0
-	if (he()+py)>120 or check_y() then
+	if (he()+py)>120 or check_y(1,p) then
 		ft+=1
 		if ft==10 then
 			ft=0
@@ -287,13 +290,14 @@ function fix()
 	end
 end
 
-function check_y()
+function check_y(_dy,_p)
 	--check for collision at y axis
+	local p=_p
 	local x,y=px/8,py/8
 	for i=1,#p do
 		for j=1,#p[i] do
 			if p[i][j]==1 then
-				local dy=1
+				local dy=_dy
 				if mget(x+(j-1),y+(i-1)+dy)==2 then
 					return true
 				end
@@ -302,10 +306,11 @@ function check_y()
 	end
 end
 
-function check_x(_dx)
+function check_x(_dx,_p)
 	--check for collision at x axis
 	local x,y=px/8,py/8
 	local dx=_dx
+	local p=_p
 	for i=1,#p do
 		for j=1,#p[i] do
 			if p[i][j]==1 then
@@ -560,6 +565,19 @@ function uprot(_j)
 	if j==1 then on="on" end
 	if j==0 then on="off" end
 end
+
+function avoidrot()
+	local pr=transpose(p)
+	pr=m_multi(pr)
+	if check_y(0,pr) then
+		return false
+	elseif 	check_x(0,pr) then
+		return false
+	else
+		return true
+	end
+end
+
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000eeee000066660000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
