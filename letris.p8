@@ -266,7 +266,7 @@ end
 
 function fix()
  --fix a piece when it reaches the floor
-	local x,y,t=px/8,py/8,0
+	local x,y,dy=px/8,py/8,0
 	if (he()+py)>120 or check_y(1,p) then
 		ft+=1
 		if ft==10 then
@@ -280,12 +280,15 @@ function fix()
 					end
 				end
 			end
-			px,py=40,0
+			if rt <3 then
+				dy=-8
+			end
 			co=nco
 			p=np
 			cpi=flr(rnd(15)+1)
 			np=cp[cpi]
 			nco=cot[cpi]
+			px,py=40,dy
 		end
 	end
 end
@@ -567,6 +570,9 @@ function uprot(_j)
 end
 
 function avoidrot()
+	--avoid rotate a piece if
+	--it is going to got through
+	--those already fixed
 	local pr=transpose(p)
 	pr=m_multi(pr)
 	if check_y(0,pr) then
